@@ -5,7 +5,7 @@ import { ortographyCheckUseCase } from './use-cases/index';
 export class GptService {
     //Solo va a llamar casos de uso
 
-    async ortographyCheck(){
-        return await ortographyCheckUseCase();
+    async ortographyCheck(orthographyDto){
+        return await ortographyCheckUseCase(orthographyDto);
     }
 }
