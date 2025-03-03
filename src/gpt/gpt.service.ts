@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ortographyCheckUseCase } from './use-cases/index';
+import { orthographyCheckUseCase } from './use-cases/index';
 import { OrthographyDto } from './dtos/ortography.dto';
 
 import OpenAI from 'openai';
@@ -15,7 +15,7 @@ export class GptService {
 
     
 
-    async ortographyCheck(prompt:string){
-        return await ortographyCheckUseCase(this.openai,{prompt:prompt});
+    async orthographyCheck(prompt:string){
+        return await orthographyCheckUseCase(this.openai,{prompt:prompt});
     }
 }

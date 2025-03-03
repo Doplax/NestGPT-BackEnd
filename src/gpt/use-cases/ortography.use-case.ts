@@ -3,7 +3,7 @@ interface Options {
   prompt: string;
 }
 
-export const ortographyCheckUseCase = async (
+export const orthographyCheckUseCase = async (
   openai: OpenAI,
   options: Options,
 ) => {
@@ -38,7 +38,9 @@ export const ortographyCheckUseCase = async (
     temperature: 0.3,
   });
 
-  return completion.choices[0].message;
+  //return completion.choices[0].message;
+  const jsonResp = JSON.parse(completion.choices[0].message.content);
 
+  return jsonResp;
   //return { prompt: prompt, apiKey: process.env.OPEN_API_KEY };
 };
