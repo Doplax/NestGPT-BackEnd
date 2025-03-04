@@ -1,11 +1,9 @@
 import OpenAI from 'openai';
-interface Options {
-  prompt: string;
-}
+import { ProsConsDiscusserDto } from '../dtos';
 
 export const prosConsDicusserStreamUseCase = async (
   openai: OpenAI,
-  {prompt}: Options,
+  {prompt}: ProsConsDiscusserDto,
 ) => {
 
   // Devolvemos 

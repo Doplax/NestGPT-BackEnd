@@ -1,11 +1,9 @@
 import OpenAI from 'openai';
-interface Options {
-  prompt: string;
-}
+import { OrthographyDto } from '../dtos/index';
 
 export const orthographyCheckUseCase = async (
   openai: OpenAI,
-  options: Options,
+  options: OrthographyDto,
 ) => {
   const { prompt } = options;
 
@@ -42,5 +40,4 @@ export const orthographyCheckUseCase = async (
   const jsonResp = JSON.parse(completion.choices[0].message.content);
 
   return jsonResp;
-  //return { prompt: prompt, apiKey: process.env.OPEN_API_KEY };
 };
