@@ -1,7 +1,7 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { GptService } from './gpt.service';
 import { ProsConsDiscusserDto, OrthographyDto, TranslateDto, TextToAudioDto  } from './dtos';
-import { Response } from 'express';
+import type { Response } from 'express';
 import { prosConsDicusserUseCase } from './use-cases/pros-cons-dicusser.use-case';
 
 @Controller('gpt')
@@ -40,7 +40,6 @@ export class GptController {
     res.end();
   }
 
-
   // TODO: Create Stream Translation
   @Post('translate')
   translateText(
@@ -50,9 +49,25 @@ export class GptController {
   }
 
   @Post('text-to-audio')
-  textToAudio(
+  async textToAudio(
     @Body() textToAudioDto : TextToAudioDto,
+    @Res() res: Response
   ){
-    return this.gptService.TextToAudio(textToAudioDto);
+    const filePath = await this.gptService.textToAudio(textToAudioDto);
+    res.setHeader('Content-Type', 'audio/mp3');
+    res.status( HttpStatus.OK );
+    res.sendFile(filePath);
+  }
+
+  @Get('text-to-audio/:fileId')
+  async getTextToAudio(
+    @Param('fileId') fileId : string,
+    @Res() res: Response
+  ){
+    const filePath = await this.gptService.textToAudioGetter(fileId);
+    res.setHeader('Content-Type', 'audio/mp3');
+    res.status( HttpStatus.OK );
+    res.sendFile(filePath);
+
   }
 }
