@@ -1,6 +1,6 @@
 import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { ProsConsDiscusserDto, OrthographyDto, TranslateDto, TextToAudioDto  } from './dtos';
+import { ProsConsDiscusserDto, OrthographyDto, TranslateDto, TextToAudioDto, AudioToTextDto  } from './dtos';
 import type { Response } from 'express';
 import { prosConsDicusserUseCase } from './use-cases/pros-cons-dicusser.use-case';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -92,8 +92,8 @@ export class GptController {
         ]
       })
     ) file: Express.Multer.File,
-    //@Body() textToAudioDto : TextToAudioDto,
+    @Body() audioToText : AudioToTextDto,
   ){
-    return this.gptService.audioToText(file);
+    return this.gptService.audioToText(file, audioToText);
   }
 }
