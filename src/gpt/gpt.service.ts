@@ -10,7 +10,13 @@ import {
 import { OrthographyDto } from './dtos/ortography.dto';
 
 import OpenAI from 'openai';
-import { AudioToTextDto, ImageGenerationDto, ProsConsDiscusserDto, TextToAudioDto, TranslateDto } from './dtos';
+import {
+  AudioToTextDto,
+  ImageGenerationDto,
+  ProsConsDiscusserDto,
+  TextToAudioDto,
+  TranslateDto,
+} from './dtos';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -56,12 +62,26 @@ export class GptService {
     //return await textToAudioUseCase(this.openai, {prompt, voice});
   }
 
-  async audioToText(audioFile: Express.Multer.File, audioToText?: AudioToTextDto) {
-    const { prompt } = audioToText ;
+  async audioToText(
+    audioFile: Express.Multer.File,
+    audioToText?: AudioToTextDto,
+  ) {
+    const { prompt } = audioToText;
     return await audioToTextUsecase(this.openai, { audioFile, prompt });
   }
 
-  async imageGeneration ( imageGeneration: ImageGenerationDto){
-    return await imageGenerationUseCase(this.openai, {...imageGeneration});
+  async imageGeneration(imageGeneration: ImageGenerationDto) {
+    return await imageGenerationUseCase(this.openai, { ...imageGeneration });
+  }
+
+  async getImageGeneration(fileName: string) {
+    const filePath = path.resolve('./', './generated/images/', fileName);
+    const exist = fs.existsSync(filePath);
+
+    if (!exist) {
+      throw new NotFoundException('File not found');
+    }
+    console.log(filePath);
+    return filePath;
   }
 }
