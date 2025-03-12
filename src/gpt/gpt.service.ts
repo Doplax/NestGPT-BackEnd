@@ -10,10 +10,11 @@ import {
 import { OrthographyDto } from './dtos/ortography.dto';
 
 import OpenAI from 'openai';
-import { AudioToTextDto, ProsConsDiscusserDto, TextToAudioDto, TranslateDto } from './dtos';
+import { AudioToTextDto, ImageGenerationDto, ProsConsDiscusserDto, TextToAudioDto, TranslateDto } from './dtos';
 
 import * as path from 'path';
 import * as fs from 'fs';
+import { imageGenerationUseCase } from './use-cases/image-generation.use-case';
 
 @Injectable()
 export class GptService {
@@ -58,5 +59,9 @@ export class GptService {
   async audioToText(audioFile: Express.Multer.File, audioToText?: AudioToTextDto) {
     const { prompt } = audioToText ;
     return await audioToTextUsecase(this.openai, { audioFile, prompt });
+  }
+
+  async imageGeneration ( imageGeneration: ImageGenerationDto){
+    return await imageGenerationUseCase(this.openai, {...imageGeneration});
   }
 }

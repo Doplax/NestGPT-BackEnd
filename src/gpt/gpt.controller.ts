@@ -5,6 +5,8 @@ import type { Response } from 'express';
 import { prosConsDicusserUseCase } from './use-cases/pros-cons-dicusser.use-case';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ImageGenerationDto } from './dtos/image-generation.dto';
+import { imageGenerationUseCase } from './use-cases/image-generation.use-case';
 
 @Controller('gpt')
 export class GptController {
@@ -96,4 +98,13 @@ export class GptController {
   ){
     return this.gptService.audioToText(file, audioToText);
   }
+
+
+  @Post('image-generation')
+  async imageGeneration(
+    @Body() imageGenerationDto : ImageGenerationDto,
+  ){
+    return this.gptService.imageGeneration(imageGenerationDto);
+  }
+  
 }
