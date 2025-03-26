@@ -38,8 +38,8 @@ export const imageGenerationUseCase = async (
   }
 
   //
-  const pngImagePath = await donwloadImageAsPng(originalImage);
-  const maskImagePath = await downloadBase64ImageAsPng(maskImage);
+  const pngImagePath = await donwloadImageAsPng(originalImage,true );
+  const maskImagePath = await downloadBase64ImageAsPng(maskImage, true);
 
   const response = await openai.images.edit({
     prompt: prompt,
