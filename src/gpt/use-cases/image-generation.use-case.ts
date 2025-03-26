@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import * as fs from 'fs';
-import { donwloadImageAsPng } from '../helpers';
+import * as path from 'path';
+import { donwloadImageAsPng, downloadBase64ImageAsPng } from '../helpers';
 
 interface Options {
   prompt: string;
@@ -14,6 +15,12 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
   const { prompt, originalImage, maskImage } = options;
   
   // Todo: Verificar original image
+
+  if( !originalImage || !maskImage){
+    throw new Error('Original image and mask image are required');
+  }
+   
+
   const response = await openai.images.generate({
     prompt: prompt,
     model: 'dall-e-3',
@@ -27,9 +34,35 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
   const url = await donwloadImageAsPng(response.data[0].url);
  
 
-
   return {
     url: url,
+    openAIUrl: response.data[0].url,
+    revised_prompt: response.data[0].revised_prompt,
+  }
+
+  //
+  const pngImagePath = await donwloadImageAsPng(originalImage);
+  const maskImagePath = await downloadBase64ImageAsPng(maskImage);
+
+  const response = await openai.images.edit({
+    prompt: prompt,
+    model: 'dall-e-3',
+    image: fs.createReadStream(pngImagePath),
+    mask: fs.createReadStream(maskImagePath),
+    n: 1,
+    size: '1024x1024',
+    response_format: 'url',
+    //quality: 'standard',
+    //original: pngImagePath,
+  });
+
+  const localImagePath = await donwloadImageAsPng(response.data[0].url);
+  const fileName = path.basename(localImagePath);
+
+  const publicUrl = `http://localhost:3000/images/${fileName}`;
+
+  return {
+    url: publicUrl,
     openAIUrl: response.data[0].url,
     revised_prompt: response.data[0].revised_prompt,
   }
