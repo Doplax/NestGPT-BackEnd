@@ -6,6 +6,7 @@ import {
   textToAudioUseCase,
   translateUseCase,
   audioToTextUsecase,
+  imageVariationUseCase
 } from './use-cases/index';
 import { OrthographyDto } from './dtos/ortography.dto';
 
@@ -13,6 +14,7 @@ import OpenAI from 'openai';
 import {
   AudioToTextDto,
   ImageGenerationDto,
+  ImageVariationDto,
   ProsConsDiscusserDto,
   TextToAudioDto,
   TranslateDto,
@@ -83,5 +85,9 @@ export class GptService {
     }
     console.log(filePath);
     return filePath;
+  }
+
+  async generateImageVariation( {baseImage} : ImageVariationDto) {
+    return await imageVariationUseCase(this.openai, {baseImage});
   }
 }
