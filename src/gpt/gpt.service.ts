@@ -76,7 +76,7 @@ export class GptService {
     return await imageGenerationUseCase(this.openai, { ...imageGeneration });
   }
 
-  async getImageGeneration(fileName: string) {
+  async getGeneratedImage(fileName: string) {
     const filePath = path.resolve('./', './generated/images/', fileName);
     const exist = fs.existsSync(filePath);
 

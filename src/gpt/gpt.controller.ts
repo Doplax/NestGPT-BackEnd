@@ -12,6 +12,12 @@ import { imageGenerationUseCase } from './use-cases/image-generation.use-case';
 export class GptController {
   constructor(private readonly gptService: GptService) {}
 
+  @Get('/')
+  basicResponse(
+  ){
+    return { message: 'Hello World' };
+  }
+
   @Post('orthography-check')
   ortographyCheck(
     @Body() orthographyDto : OrthographyDto,
@@ -108,15 +114,14 @@ export class GptController {
   }
 
   @Get('image-generation/:filename')
-  async getImageGeneration(
-    @Param('filename') fileName : string,
+  async getGeneration(
     @Res() res: Response,
-    @Body() imageGenerationDto : ImageGenerationDto,
+    @Param('filename') fileName : string,
   ){
-    const filePath = await this.gptService.getImageGeneration(fileName);
+    const filePath = await this.gptService.getGeneratedImage(fileName);
     res.status( HttpStatus.OK );
     res.sendFile(filePath);
-    return filePath;
+    //return filePath;
   }
 
   @Post('image-variation')
