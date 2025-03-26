@@ -9,35 +9,32 @@ interface Options {
   maskImage?: string;
 }
 
-
-export const imageGenerationUseCase = async (openai: OpenAI, options: Options) => {
-
+export const imageGenerationUseCase = async (
+  openai: OpenAI,
+  options: Options,
+) => {
   const { prompt, originalImage, maskImage } = options;
-  
+
   // Todo: Verificar original image
 
-  if( !originalImage || !maskImage){
-    throw new Error('Original image and mask image are required');
-  }
-   
+  if (!originalImage || !maskImage) {
+    const response = await openai.images.generate({
+      prompt: prompt,
+      model: 'dall-e-3',
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard',
+      response_format: 'url',
+    });
 
-  const response = await openai.images.generate({
-    prompt: prompt,
-    model: 'dall-e-3',
-    n: 1,
-    size: '1024x1024',
-    quality: 'standard',
-    response_format: 'url',
+    const fileName = await donwloadImageAsPng(response.data[0].url);
+    const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
-  });
-
-  const url = await donwloadImageAsPng(response.data[0].url);
- 
-
-  return {
-    url: url,
-    openAIUrl: response.data[0].url,
-    revised_prompt: response.data[0].revised_prompt,
+    return {
+      url: url,
+      openAIUrl: response.data[0].url,
+      revised_prompt: response.data[0].revised_prompt,
+    };
   }
 
   //
@@ -56,14 +53,12 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
     //original: pngImagePath,
   });
 
-  const localImagePath = await donwloadImageAsPng(response.data[0].url);
-  const fileName = path.basename(localImagePath);
-
-  const publicUrl = `http://localhost:3000/images/${fileName}`;
-
+  const fileName = await donwloadImageAsPng(response.data[0].url);
+  const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
+  
   return {
-    url: publicUrl,
+    url: url,
     openAIUrl: response.data[0].url,
     revised_prompt: response.data[0].revised_prompt,
-  }
+  };
 };
