@@ -18,7 +18,7 @@ export const imageVariationUseCase = async (
   console.log(pngImageFullPath);
 
   const response = await openai.images.createVariation({
-    model: 'dall-e-3',
+    model: 'dall-e-2',
     image: fs.createReadStream(pngImageFullPath),
     n:1,
     size: '1024x1024',
@@ -26,8 +26,9 @@ export const imageVariationUseCase = async (
   });
 
   const fileName = await donwloadImageAsPng( response.data[0].url );
-  const url = `${ process.env.BASE_URL }/gpt/image-generation/${fileName}`;
+  const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
+  console.log('tomate'); 
   return { 
     url: url,
     openAIUrl: response.data[0].url,
