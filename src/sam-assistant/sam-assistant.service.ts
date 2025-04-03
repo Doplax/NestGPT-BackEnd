@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import { createThreadUseCase } from './use-cases/create-thread.use-case';
 import { QuestionDto } from './dtos/question.dto';
-import { checkCompleteStatusUseCase, createMessageUseCase, createRunUseCase } from './use-cases';
+import { checkCompleteStatusUseCase, createMessageUseCase, createRunUseCase, getMessageListUseCase } from './use-cases';
 
 @Injectable()
 export class SamAssistantService {
@@ -29,6 +29,8 @@ export class SamAssistantService {
             threadId: threadId,
         });
 
-        return questionDto;
+        const messages = await getMessageListUseCase(this.openai, { threadId})
+
+        return messages.reverse();
     }
 }
