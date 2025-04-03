@@ -5,5 +5,5 @@ export class QuestionDto {
     readonly threadId: string;
 
     @IsString()
-    readonly answer: string;
+    readonly question: string;
 }
