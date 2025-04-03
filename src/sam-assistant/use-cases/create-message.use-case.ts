@@ -13,7 +13,6 @@ export const createMessageUseCase = async (openAi:OpenAI ,options:Options) => {
         content: questions,
     })
 
-    console.log(message);
-    
+    //console.log(message);
     return message
 }
