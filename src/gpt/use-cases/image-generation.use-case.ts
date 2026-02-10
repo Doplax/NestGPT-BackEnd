@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import * as fs from 'fs';
 import * as path from 'path';
-import { donwloadImageAsPng, downloadBase64ImageAsPng } from '../helpers';
+import { downloadImageAsPng, downloadBase64ImageAsPng } from '../helpers';
 
 interface Options {
   prompt: string;
@@ -27,7 +27,7 @@ export const imageGenerationUseCase = async (
       response_format: 'url',
     });
 
-    const fileName = await donwloadImageAsPng(response.data[0].url);
+    const fileName = await downloadImageAsPng(response.data[0].url);
     const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
     return {
@@ -38,7 +38,7 @@ export const imageGenerationUseCase = async (
   }
 
   //
-  const pngImagePath = await donwloadImageAsPng(originalImage,true );
+  const pngImagePath = await downloadImageAsPng(originalImage,true );
   const maskImagePath = await downloadBase64ImageAsPng(maskImage, true);
 
   const response = await openai.images.edit({
@@ -53,7 +53,7 @@ export const imageGenerationUseCase = async (
     //original: pngImagePath,
   });
 
-  const fileName = await donwloadImageAsPng(response.data[0].url);
+  const fileName = await downloadImageAsPng(response.data[0].url);
   const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
   
   return {

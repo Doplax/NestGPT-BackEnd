@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import * as fs from 'fs';
 import * as path from 'path';
-import { donwloadImageAsPng, downloadBase64ImageAsPng } from '../helpers';
+import { downloadImageAsPng, downloadBase64ImageAsPng } from '../helpers';
 import { url } from 'inspector';
 
 interface Options {
@@ -14,7 +14,7 @@ export const imageVariationUseCase = async (
 ) => {
   const { baseImage } = options;
 
-  const pngImageFullPath = await donwloadImageAsPng(baseImage, true);
+  const pngImageFullPath = await downloadImageAsPng(baseImage, true);
   console.log(pngImageFullPath);
 
   const response = await openai.images.createVariation({
@@ -25,7 +25,7 @@ export const imageVariationUseCase = async (
     response_format: 'url',
   });
 
-  const fileName = await donwloadImageAsPng( response.data[0].url );
+  const fileName = await downloadImageAsPng( response.data[0].url );
   const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
   console.log('tomate'); 

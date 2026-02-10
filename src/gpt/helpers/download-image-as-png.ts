@@ -1,10 +1,10 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as sharp from 'sharp';
+import sharp from 'sharp'; 
 
 import { InternalServerErrorException } from '@nestjs/common';
 
-export const donwloadImageAsPng = async (
+export const downloadImageAsPng = async ( // 👈 Corregido el typo "donwload"
   url: string,
   fullPath: boolean = false,
 ) => {
@@ -15,12 +15,12 @@ export const donwloadImageAsPng = async (
   }
 
   const folderPath = path.resolve('./', './generated/images/');
-  fs.mkdirSync(folderPath, { recursive: true }); // Create folder if not exists
+  fs.mkdirSync(folderPath, { recursive: true });
 
   const imageNamePng = `${Date.now()}.png`;
   const buffer = Buffer.from(await response.arrayBuffer());
 
-  //fs.writeFileSync( `${folderPath}/${imageNamePng}`, buffer);
+  // fs.writeFileSync( `${folderPath}/${imageNamePng}`, buffer);
   const completePath = path.join(folderPath, imageNamePng);
 
   await sharp(buffer).png().ensureAlpha().toFile(completePath);
@@ -32,7 +32,7 @@ export const downloadBase64ImageAsPng = async (
   base64Image: string,
   fullPath: boolean = false,
 ) => {
-  // Remover encabezado
+  // Remover encabezado si existe
   base64Image = base64Image.split(';base64,').pop();
   const imageBuffer = Buffer.from(base64Image, 'base64');
 
@@ -46,6 +46,5 @@ export const downloadBase64ImageAsPng = async (
   // Transformar a RGBA, png // Así lo espera OpenAI
   await sharp(imageBuffer).png().ensureAlpha().toFile(completePath);
 
-  //return completePath;
   return fullPath ? completePath : imageNamePng;
 };
