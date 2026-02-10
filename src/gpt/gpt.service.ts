@@ -49,20 +49,20 @@ export class GptService {
     return await textToAudioUseCase(this.openai, { prompt, voice });
   }
 
-  async textToAudioGetter(fileId: string) {
-    const filePath = path.resolve(
-      __dirname,
-      `../../generated/audios/${fileId}.mp3`,
-    );
-    const wasFileFound = fs.existsSync(filePath);
+  //async textToAudioGetter(fileId: string) {
+  //  const filePath = path.resolve(
+  //    __dirname,
+  //    `../../generated/audios/${fileId}.mp3`,
+  //  );
+  //  const wasFileFound = fs.existsSync(filePath);
 
-    if (!wasFileFound) {
-      new NotFoundException(`File ${fileId} not found`);
-    }
+  //  if (!wasFileFound) {
+  //    new NotFoundException(`File ${fileId} not found`);
+  //  }
 
-    return filePath;
-    //return await textToAudioUseCase(this.openai, {prompt, voice});
-  }
+  //  return filePath;
+  //  //return await textToAudioUseCase(this.openai, {prompt, voice});
+  //}
 
   async audioToText(
     audioFile: Express.Multer.File,
@@ -76,16 +76,16 @@ export class GptService {
     return await imageGenerationUseCase(this.openai, { ...imageGeneration });
   }
 
-  async getGeneratedImage(fileName: string) {
-    const filePath = path.resolve('./', './generated/images/', fileName);
-    const exist = fs.existsSync(filePath);
+  //async getGeneratedImage(fileName: string) {
+  //  const filePath = path.resolve('./', './generated/images/', fileName);
+  //  const exist = fs.existsSync(filePath);
 
-    if (!exist) {
-      throw new NotFoundException('File not found');
-    }
-    console.log(filePath);
-    return filePath;
-  }
+  //  if (!exist) {
+  //    throw new NotFoundException('File not found');
+  //  }
+  //  console.log(filePath);
+  //  return filePath;
+  //}
 
   async generateImageVariation( {baseImage} : ImageVariationDto) {
     return await imageVariationUseCase(this.openai, {baseImage});
